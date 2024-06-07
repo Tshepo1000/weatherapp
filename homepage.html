@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather APP</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            /* background-color: #f0f0f0; */
+            background: linear-gradient(135deg, #092753, #1a2336, #030613, #24243e);
+        }
+
+        input{
+            width: 90%;
+            background-color: transparent;
+            border: 1px solid white;
+            height: 25px;
+            padding: 8px;
+            font-size: large;
+            border-radius: 5px;
+        }
+
+        button{
+            margin-top: 50px;
+            height: 30px;
+            width: 40%;
+            /* background-color: rgb(27, 65, 52); */
+            background: linear-gradient(135deg, #092753, #1a2336, #030613, #24243e);
+            font-size: large;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        button:hover{
+            background-color: transparent;
+            border: 1px solid white;
+        }
+
+        .container{
+            height: 500px;
+            width: 20%;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 50%);
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        @media screen and (max-width: 768px) {
+            .container{
+                width: 80%;
+                height: 70%;
+            }
+
+            button{
+                height: 25px;
+                width: 35%;
+                font-size: small;
+            }
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 1200px) {
+            .container{
+                height: 500px;
+                width: 50%;
+            }
+
+            button{
+                height: 40px;
+                width: 30%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: rgb(71, 165, 182);">Weather App</h1>
+        <p id="info" style="font-size: 17px; margin-bottom: 50px; color: rgb(50, 123, 190);"></p>
+        <input type="text" id="cityInput" placeholder="Enter city name" style="color: white;">
+        <button onclick="getWeather();">Get Weather</button>
+
+        <div id="weatherInfo" style="color: white;"></div>
+    </div>
+
+    <script>
+        var i = 0;
+        var txt = 'Get Real Time Weather Updates';
+        var speed = 100;
+        function typeWriter() {
+        if (i < txt.length) {
+            document.getElementById("info").innerHTML += txt.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+        }
+        }
+        typeWriter();
+
+        function getWeather(){
+            const city = document.getElementById("cityInput").value;
+            const apiKey = "60fd2e95260ceb1accea1a4dab94296f";
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+        
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const weatherInfo = document.getElementById("weatherInfo");
+                weatherInfo.innerHTML = `
+                        <h2>${data.name}</h2>
+                        <p>${data.weather[0].description}</p>
+                        <p>Temperature: ${data.main.temp}&deg;C</p>
+                        <p>Humidity: ${data.main.humidity}%</p>
+                    `;
+            })
+            .catch(error => {
+            console.error("Error fetching weather data:", error);
+            const weatherInfo = document.getElementById("weatherInfo");
+            weatherInfo.innerHTML = "<p>Failed to fetch weather data. Please try again later.</p>"
+        });
+
+    }
+
+
+    </script>
+</body>
+</html>
